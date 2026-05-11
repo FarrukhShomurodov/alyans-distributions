@@ -1,0 +1,14 @@
+{
+    "private": true,
+    "scripts": {
+        "dev": "npm run development",
+        "development": "mix",
+        "prod": "npm run production",
+        "production": "mix --production"
+    },
+    "devDependencies": {
+        "axios": "^1.7.4",
+        "laravel-mix": "^6.0.0",
+        "postcss-import": "^16.1.0"
+    }
+}

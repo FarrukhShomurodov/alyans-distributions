@@ -1,0 +1,17 @@
+parameters:
+    paths:
+        - app/
+    level: 9
+    checkGenericClassInNonGenericObjectType: false
+    treatPhpDocTypesAsCertain: false
+    excludePaths:
+            - /vendor
+    scanDirectories:
+        - /app/Models
+    ignoreErrors:
+        - '#Method .+::store\(\) should return .+ but returns mixed#'
+        - '#Cannot cast mixed to string#'
+        - '#Method .+::update\(\) should return .+ but returns mixed#'
+#        - '#Access to an undefined property .+\$password#'
+        - '#Method App\\Http\\Requests\\Admin\\StorageRequest::rules\(\) has invalid return type .*#'
+        - '#Method App\\Http\\Requests\\Admin\\StorageRequest::rules\(\) should return array<string, array<string, App\\Http\\Requests\\Admin\\Illuminate\\Validation\\Rules\\Password>> but returns .*#'
