@@ -16,6 +16,8 @@ class Admin extends Authenticatable
     protected $fillable = [
         'login',
         'password',
+        'telegram_user_id',
+        'telegram_username',
     ];
 
     /**

@@ -2,22 +2,27 @@
 
 namespace App\Http\Controllers\Telegram;
 
+use App\Models\Admin;
 use App\Models\BotUser;
 use App\Models\Product;
 use App\Models\PromotionSetting;
 use App\Models\SupportChat;
 use App\Models\SupportMessage;
+use App\Services\SupportForumService;
 use Throwable;
 use Telegram\Bot\Api;
+use Telegram\Bot\FileUpload\InputFile;
 use Telegram\Bot\Keyboard\Keyboard;
 
 class TelegramController
 {
     protected Api $telegram;
+    protected SupportForumService $forum;
 
     public function __construct()
     {
         $this->telegram = new Api(env('TELEGRAM_BOT_TOKEN'));
+        $this->forum = new SupportForumService();
     }
 
     private function t($user, $key, $replace = [])
@@ -69,6 +74,35 @@ class TelegramController
 
         $message = $update->getMessage();
         $chatId = $message->getChat()->getId();
+        $chatType = (string) $message->getChat()->getType();
+
+        // === Сообщение из менеджерской супергруппы (forum topic) ===
+        $supportGroupId = config('services.support.group_id');
+        if ($supportGroupId && (string) $chatId === (string) $supportGroupId) {
+            try {
+                $this->handleManagerForumMessage($message);
+            } catch (Throwable $e) {
+                \Log::error('[support_forum] manager reply handler упал', [
+                    'error' => $e->getMessage(),
+                ]);
+            }
+            return;
+        }
+
+        // === Любое сообщение из группы/супергруппы — не пользователь, не обрабатываем как бота ===
+        if (in_array($chatType, ['group', 'supergroup'], true)) {
+            $chatTitle = (string) $message->getChat()->getTitle();
+            \Log::warning('[support_forum] получено сообщение из группы, которая не совпадает с TELEGRAM_SUPPORT_GROUP_ID', [
+                'this_chat_id'   => $chatId,
+                'this_chat_title'=> $chatTitle,
+                'this_chat_type' => $chatType,
+                'is_forum'       => (bool) data_get($message, 'chat.is_forum', false),
+                'configured_id'  => $supportGroupId,
+                'hint'           => 'Если это ваша группа поддержки — пропишите TELEGRAM_SUPPORT_GROUP_ID=' . $chatId,
+            ]);
+            return;
+        }
+
         $text = trim((string) $message->getText());
         if ($text === '') {
             $caption = trim((string) data_get($message, 'caption', ''));
@@ -398,6 +432,8 @@ class TelegramController
 
             if ($chat) {
                 $chat->update(['status' => 'closed']);
+                $this->forum->notifyClientClosed($chat);
+                $this->forum->closeTopic($chat);
             }
 
             $user->update(['step' => 'done', 'current_chat_id' => null]);
@@ -489,6 +525,18 @@ class TelegramController
 
             $chat->update(['status' => 'open']);
             $user->update(['step' => 'chat_with_manager']);
+
+            // === Форвард сообщения в менеджерскую тему (forum topic) ===
+            // Берём локальный путь (тот же, что сохраняли в storage)
+            $localPath = $this->urlToStoragePath($fileUrl);
+            $this->forum->forwardClientMessage(
+                $chat->fresh()->load('user', 'order'),
+                $text,
+                $localPath,
+                $fileMime,
+                (bool) $photoUrl,
+                $fileName
+            );
 
             $this->telegram->sendMessage([
                 'chat_id' => $chatId,
@@ -994,5 +1042,234 @@ class TelegramController
         } catch (Throwable $e) {
             report($e);
         }
+    }
+
+    /* =========================================================================
+     | МЕНЕДЖЕРСКАЯ ГРУППА (FORUM TOPICS)
+     * =======================================================================*/
+
+    /**
+     * Обработка сообщения, пришедшего в супергруппу менеджеров.
+     * Только из темы, привязанной к SupportChat. Ответы пересылаются клиенту.
+     */
+    private function handleManagerForumMessage($message): void
+    {
+        // Игнорируем системные апдейты (новый участник, закрытие темы и т.п.)
+        // — у них нет from/text/photo/document/caption
+        $from = $this->msgFrom($message);
+        if (!$from) {
+            return;
+        }
+
+        // Не реагируем на сообщения самого бота
+        $isBot = (bool) data_get($from, 'is_bot', false);
+        if ($isBot) {
+            return;
+        }
+
+        // message_thread_id — обязательный признак сообщения в теме
+        $topicId = (int) (data_get($message, 'message_thread_id', 0)
+            ?: data_get($message, 'reply_to_message.message_thread_id', 0));
+        if ($topicId <= 0) {
+            return;
+        }
+
+        $chat = SupportChat::where('telegram_topic_id', $topicId)->with('user', 'order')->first();
+        if (!$chat) {
+            return;
+        }
+
+        $managerTgId = (int) data_get($from, 'id');
+        $managerUname = (string) data_get($from, 'username', '');
+        $managerFirstName = trim((string) data_get($from, 'first_name', ''));
+        $managerName = $managerUname !== '' ? '@' . $managerUname : ($managerFirstName ?: 'Менеджер');
+
+        $text = trim((string) data_get($message, 'text', ''));
+        $caption = trim((string) data_get($message, 'caption', ''));
+        if ($text === '' && $caption !== '') {
+            $text = $caption;
+        }
+
+        // === Служебные команды в теме ===
+        if (str_starts_with($text, '/close')) {
+            $this->handleTopicCloseCommand($chat);
+            return;
+        }
+        if (str_starts_with($text, '/info')) {
+            $this->forum->sendInfoCard($chat);
+            return;
+        }
+
+        // Маппинг telegram_user_id → admin_id (если менеджер привязан)
+        $admin = $managerTgId
+            ? Admin::where('telegram_user_id', $managerTgId)->first()
+            : null;
+
+        // === Извлекаем медиа ===
+        $photoUrl = $this->extractPhotoUrl($message);
+        $document = $this->extractDocument($message);
+
+        $fileUrl = $photoUrl ?: ($document['url'] ?? null);
+        $fileName = $document['file_name'] ?? null;
+        $fileMime = $document['mime_type'] ?? null;
+        $isImage = (bool) $photoUrl;
+        $localPath = $this->urlToStoragePath($fileUrl);
+
+        if ($text === '' && !$fileUrl) {
+            return; // пустое или непонятное сообщение — игнор
+        }
+
+        // === Сохраняем в БД ===
+        $messageText = $text;
+        if ($messageText === '' && $isImage) {
+            $messageText = '📷 Фото';
+        } elseif ($messageText === '' && $document) {
+            $ext = $document['file_name'] ? strtoupper(pathinfo($document['file_name'], PATHINFO_EXTENSION) ?: '') : '';
+            $icon = str_contains(strtolower($document['mime_type'] ?? ''), 'pdf') ? '📄' : '📎';
+            $messageText = trim("{$icon} {$ext} {$document['file_name']}");
+        }
+
+        $msgData = [
+            'chat_id' => $chat->id,
+            'admin_id' => $admin?->id,
+            'is_from_user' => false,
+            'text' => $messageText,
+            'photo_url' => $fileUrl,
+            'source' => 'support',
+            'source_order_id' => $chat->order_id,
+        ];
+        if (\Schema::hasColumn('support_messages', 'file_name')) {
+            $msgData['file_name'] = $fileName;
+        }
+        if (\Schema::hasColumn('support_messages', 'file_mime')) {
+            $msgData['file_mime'] = $fileMime;
+        }
+
+        try {
+            SupportMessage::create($msgData);
+        } catch (Throwable $e) {
+            \Log::error('[support_forum] не удалось сохранить ответ менеджера', [
+                'chat_id' => $chat->id,
+                'error' => $e->getMessage(),
+            ]);
+        }
+
+        // Поднимаем чат если он был closed
+        if ($chat->status === 'closed') {
+            $chat->update(['status' => 'open']);
+        }
+
+        // === Отправляем клиенту ===
+        $clientTgId = $chat->user->chat_id;
+        try {
+            if ($localPath && $isImage) {
+                $this->telegram->sendPhoto([
+                    'chat_id' => $clientTgId,
+                    'photo' => InputFile::create(
+                        \Illuminate\Support\Facades\Storage::disk('public')->path($localPath),
+                        $fileName ?: 'photo.jpg'
+                    ),
+                    'caption' => $text !== '' ? $text : null,
+                ]);
+            } elseif ($localPath) {
+                $this->telegram->sendDocument([
+                    'chat_id' => $clientTgId,
+                    'document' => InputFile::create(
+                        \Illuminate\Support\Facades\Storage::disk('public')->path($localPath),
+                        $fileName ?: 'file'
+                    ),
+                    'caption' => $text !== '' ? $text : null,
+                ]);
+            } else {
+                $this->telegram->sendMessage([
+                    'chat_id' => $clientTgId,
+                    'text' => $text,
+                ]);
+            }
+        } catch (Throwable $e) {
+            \Log::error('[support_forum] не удалось переслать ответ менеджера клиенту', [
+                'chat_id' => $chat->id,
+                'client_tg_id' => $clientTgId,
+                'error' => $e->getMessage(),
+            ]);
+
+            // Сообщаем менеджеру в ту же тему
+            try {
+                $this->telegram->sendMessage([
+                    'chat_id' => config('services.support.group_id'),
+                    'message_thread_id' => $topicId,
+                    'text' => '⚠️ Не удалось доставить сообщение клиенту: ' . $e->getMessage(),
+                ]);
+            } catch (Throwable) {}
+        }
+    }
+
+    /**
+     * /close в теме — закрыть чат, уведомить клиента, закрыть тему.
+     */
+    private function handleTopicCloseCommand(SupportChat $chat): void
+    {
+        if ($chat->status === 'closed') {
+            return;
+        }
+
+        $chat->update(['status' => 'closed']);
+        $chat->user?->update(['step' => 'done', 'current_chat_id' => null]);
+
+        $closedMsg = $this->t($chat->user, 'bot.chat_ended')
+            ?: '🔚 Менеджер завершил чат. Спасибо за обращение!';
+        try {
+            // Одно сообщение — и текст закрытия, и клавиатура главного меню
+            $this->sendMainMenu($chat->user->chat_id, $chat->user, $closedMsg);
+        } catch (Throwable $e) {
+            \Log::warning('[support_forum] не уведомили клиента о закрытии', [
+                'chat_id' => $chat->id,
+                'error' => $e->getMessage(),
+            ]);
+        }
+
+        try {
+            $this->telegram->sendMessage([
+                'chat_id' => config('services.support.group_id'),
+                'message_thread_id' => (int) $chat->telegram_topic_id,
+                'text' => '✅ Чат закрыт.',
+            ]);
+        } catch (Throwable) {}
+
+        $this->forum->closeTopic($chat);
+    }
+
+    /**
+     * Преобразовать публичный URL в относительный путь в storage/app/public.
+     * Возвращает null, если URL не относится к этому storage.
+     */
+    private function urlToStoragePath(?string $url): ?string
+    {
+        if (!$url) {
+            return null;
+        }
+
+        $marker = '/storage/';
+        $pos = strpos($url, $marker);
+        if ($pos === false) {
+            return null;
+        }
+
+        return substr($url, $pos + strlen($marker));
+    }
+
+    /**
+     * Извлечь from-объект из апдейта (Update-message).
+     */
+    private function msgFrom($message): ?array
+    {
+        if (is_object($message) && method_exists($message, 'get')) {
+            $from = $message->get('from');
+            if (is_array($from)) return $from;
+            if (is_object($from) && method_exists($from, 'all')) return $from->all();
+        }
+
+        $from = data_get($message, 'from');
+        return is_array($from) ? $from : null;
     }
 }

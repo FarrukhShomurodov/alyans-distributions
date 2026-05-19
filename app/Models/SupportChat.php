@@ -6,7 +6,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class SupportChat extends Model
 {
-    protected $fillable = ['bot_user_id', 'order_id', 'status'];
+    protected $fillable = [
+        'bot_user_id',
+        'order_id',
+        'status',
+        'telegram_topic_id',
+    ];
 
     public function user()
     {

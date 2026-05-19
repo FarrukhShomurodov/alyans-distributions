@@ -27,6 +27,13 @@ return [
             ',',
             env('SUPPORT_MANAGERS', 'alyans_manager1,alyans_manager2')
         )))),
+
+        /*
+         * Telegram-супергруппа с темами (forum) для менеджеров.
+         * ID отрицательный (для супергрупп вида -100xxxxx).
+         * Бот должен быть админом группы с правом "Управлять темами".
+         */
+        'group_id' => env('TELEGRAM_SUPPORT_GROUP_ID'),
     ],
 
     'ses' => [

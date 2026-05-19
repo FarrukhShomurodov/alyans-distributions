@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Dashboard;
 
 use App\Models\SupportChat;
 use App\Models\SupportMessage;
+use App\Services\SupportForumService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -94,6 +95,28 @@ class SupportMessageController
             return back()->with('error', 'Сообщение сохранено, но не отправилось в Telegram: ' . $e->getMessage());
         }
 
+        // === Дублируем в менеджерскую тему (если форум настроен) ===
+        try {
+            $forum = new SupportForumService();
+            if ($forum->enabled()) {
+                $adminName = auth()->user()?->login ?? 'Админ';
+                $forum->postAdminMessageToTopic(
+                    $chat->loadMissing('user', 'order'),
+                    $adminName,
+                    $text,
+                    $localPath,
+                    $isImage,
+                    $fileName
+                );
+            }
+        } catch (\Throwable $e) {
+            // не критично, ответ клиенту уже ушёл
+            Log::warning('[support_send] не удалось продублировать ответ в тему', [
+                'chat_id' => $chat->id,
+                'error' => $e->getMessage(),
+            ]);
+        }
+
         return back()->with('success', 'Сообщение отправлено клиенту.');
     }
 
@@ -102,9 +125,27 @@ class SupportMessageController
         $chat->update(['status' => 'closed']);
 
         $botUser = $chat->user;
-        $botUser->update(['step' => 'done']);
+        $botUser->update(['step' => 'done', 'current_chat_id' => null]);
 
         $this->sendMainMenu($chat->user->chat_id, $botUser, $this->t($botUser, 'bot.chat_ended'));
+
+        // Закрыть тему в Telegram-группе
+        try {
+            $forum = new SupportForumService();
+            if ($forum->enabled() && $chat->telegram_topic_id) {
+                $forum->postAdminMessageToTopic(
+                    $chat->loadMissing('user', 'order'),
+                    auth()->user()?->login ?? 'Админ',
+                    '✅ Чат закрыт из админки.',
+                );
+                $forum->closeTopic($chat);
+            }
+        } catch (\Throwable $e) {
+            Log::warning('[support_close] не удалось закрыть тему', [
+                'chat_id' => $chat->id,
+                'error' => $e->getMessage(),
+            ]);
+        }
 
         return redirect()->route('support.index');
     }
