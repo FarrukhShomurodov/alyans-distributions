@@ -53,26 +53,4 @@ return [
         ],
     ],
 
-    'onec' => [
-        'token' => env('ONEC_TOKEN'),
-    ],
-
-    'sova' => [
-        'base_url' => env('SOVA_API_URL', 'http://188.127.242.20:43425'),
-//        'token' => env('SOVA_API_TOKEN'),
-        'token' => 'cqlVLs3xBip$eFvVSW9G9LHay##mM17LZW2fVK5Jsb0=',
-    ],
-
-    'cdek' => [
-        'client_id' => env('CDEK_CLIENT_ID'),
-        'client_secret' => env('CDEK_CLIENT_SECRET'),
-        'api_url' => env('CDEK_API_URL', 'https://api.cdek.ru/v2'),
-        'from_city_code' => env('CDEK_FROM_CITY_CODE', 44),
-    ],
-
-    'yandex' => [
-        'geocoder_key' => env('YANDEX_MAPS_API_KEY'),           // JavaScript API и HTTP Геокодер (UUID формат)
-        'delivery_token' => env('YANDEX_DELIVERY_TOKEN'),       // Яндекс Доставка Express API (y0__ формат)
-    ],
-
 ];

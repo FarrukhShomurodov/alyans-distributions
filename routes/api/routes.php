@@ -1,9 +1,6 @@
 <?php
 
 use App\Http\Controllers\Dashboard\Api\ImageController;
-use App\Http\Controllers\Integration\OneCController;
-use App\Http\Controllers\Integration\SovaController;
-use App\Http\Middleware\AuthenticateOneC;
 use App\Http\Controllers\Telegram\Api\CartController;
 use App\Http\Controllers\Telegram\Api\FavoriteController;
 use App\Http\Controllers\Telegram\Api\OrderController;
@@ -42,15 +39,6 @@ Route::prefix('webapp')
         // order
         Route::post('order/create', [OrderController::class, 'create']);
 
-        // delivery
-        Route::get('delivery/cdek-pvz', [\App\Http\Controllers\Telegram\Api\DeliveryController::class, 'cdekPvz']);
-        Route::post('delivery/cdek-calculate', [\App\Http\Controllers\Telegram\Api\DeliveryController::class, 'cdekCalculate']);
-        Route::get('delivery/yandex-pvz', [\App\Http\Controllers\Telegram\Api\DeliveryController::class, 'yandexPvz']);
-
-        // geocoding (server-side via Yandex HTTP Geocoder API)
-        Route::get('geo/reverse', [\App\Http\Controllers\Telegram\Api\DeliveryController::class, 'reverseGeocode']);
-        Route::get('geo/forward', [\App\Http\Controllers\Telegram\Api\DeliveryController::class, 'forwardGeocode']);
-
         // product share
         Route::post('product/share', [ProductShareController::class, 'share']);
 
@@ -62,26 +50,3 @@ Route::prefix('webapp')
 
 // paycom
 Route::post('paycom', [PaycomController::class, 'handleRequest']);
-
-Route::get('integrations/1c/health', [OneCController::class, 'health']);
-
-Route::prefix('integrations/1c')
-    ->middleware(AuthenticateOneC::class)
-    ->group(function () {
-        Route::get('orders', [OneCController::class, 'orders']);
-        Route::post('orders/mark-exported', [OneCController::class, 'markOrdersExported']);
-        Route::patch('orders/{order}/status', [OneCController::class, 'updateOrderStatus']);
-        Route::post('stocks/sync', [OneCController::class, 'syncStocks']);
-    });
-
-Route::get('integrations/sova/health', [SovaController::class, 'health']);
-
-Route::prefix('integrations/sova')
-    ->middleware(AuthenticateOneC::class)
-    ->group(function () {
-        Route::post('sync', [SovaController::class, 'syncAll']);
-        Route::post('sync/categories', [SovaController::class, 'syncCategories']);
-        Route::post('sync/products', [SovaController::class, 'syncProducts']);
-        Route::post('sync/stocks', [SovaController::class, 'syncStocks']);
-        Route::post('export/orders', [SovaController::class, 'exportOrders']);
-    });

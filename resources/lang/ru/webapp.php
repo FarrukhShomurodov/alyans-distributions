@@ -45,7 +45,6 @@ return [
     'cart_empty' => 'Корзина пуста',
     'pay' => 'Оплатить',
     'order' => 'Заказать',
-    'min_order_hint' => 'Минимальный заказ от :amount сум',
 
     'favorites_title' => 'Избранное',
     'favorites_empty' => 'Избранных товаров нет',

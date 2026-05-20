@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Requests\StockRequest;
 use App\Models\Stock;
-use App\Services\OneCIntegrationService;
 use App\Services\StockService;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
@@ -86,11 +85,11 @@ class StockController
         return redirect()->route('stocks.index')->with('success', 'Остатки успешно обновлены!');
     }
 
-    public function import(Request $request, OneCIntegrationService $syncService): RedirectResponse
+    public function import(Request $request): RedirectResponse
     {
         $request->validate([
             'file' => 'required|file|mimes:csv,txt,xlsx,xls|max:10240',
-            'source' => 'nullable|string|in:sova,1c,file,manual',
+            'source' => 'nullable|string|in:file,manual',
         ]);
 
         $source = $request->input('source', 'file');
@@ -130,7 +129,7 @@ class StockController
                 return back()->with('error', 'Файл пуст или не содержит корректных данных.');
             }
 
-            $result = $syncService->syncStocks($items, $source);
+            $result = $this->service->syncStocks($items, $source);
 
             return back()->with('success',
                 "Импорт завершён: обновлено {$result['updated']}, пропущено {$result['skipped']}" .

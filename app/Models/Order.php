@@ -8,11 +8,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Order extends Model
 {
-    protected $casts = [
-        'one_c_exported_at' => 'datetime',
-        'sova_exported_at' => 'datetime',
-    ];
-
     protected $fillable = [
         'user_id',
         'total',
@@ -22,8 +17,6 @@ class Order extends Model
         'delivery_type',
         'delivery_address',
         'delivery_phone',
-        'one_c_exported_at',
-        'sova_exported_at',
         'promo_code_id',
         'promo_code_discount',
         'first_name',

@@ -9,7 +9,7 @@ class StockHistory extends Model
 {
     const TYPE = ['plus', 'minus'];
 
-    const SOURCE = ['order', 'manual', '1c', 'sova', 'file'];
+    const SOURCE = ['order', 'manual', 'file'];
 
     protected $fillable = [
         'stock_id',

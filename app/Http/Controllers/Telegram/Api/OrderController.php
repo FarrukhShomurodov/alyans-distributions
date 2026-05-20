@@ -8,12 +8,9 @@ use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\PromoCode;
 use App\Models\StockHistory;
-use App\Services\SovaIntegrationService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Mail;
 use Telegram\Bot\Api;
 
 class OrderController
@@ -64,15 +61,6 @@ class OrderController
             return response()->json([
                 'success' => false,
                 'msg' => $this->t($user, 'order.cart_empty'),
-            ]);
-        }
-
-        // Минимальная сумма заказа
-        $minOrder = 1500;
-        if (($pricing['total'] ?? 0) < $minOrder) {
-            return response()->json([
-                'success' => false,
-                'msg' => "Минимальная сумма заказа — {$minOrder} сум",
             ]);
         }
 
@@ -199,76 +187,10 @@ class OrderController
             'parse_mode' => 'Markdown',
         ]);
 
-        // === Email уведомление ===
-        try {
-            $emailTo = config('mail.order_notify_to', config('app.order_notification_email', 'orders@alyans-distributions.ru'));
-            Mail::raw($this->buildOrderEmailText($order, $user), function ($m) use ($emailTo, $order) {
-                $m->to($emailTo)->subject("Новый заказ №{$order->id} — ALYANS DISTRIBUTIONS");
-            });
-        } catch (\Throwable $e) {
-            Log::warning('Order email notification failed: ' . $e->getMessage());
-        }
-
-        // === Экспорт в Сову (опционально) ===
-        try {
-            /** @var SovaIntegrationService $sova */
-            $sova = app(SovaIntegrationService::class);
-            $result = $sova->exportOrders(true, 1);
-
-            if (!empty($result['error'])) {
-                Log::warning("Sova export on create: order #{$order->id} failed", $result);
-            } elseif (!empty($result['skipped'])) {
-                Log::warning("Sova export on create: order #{$order->id} skipped", [
-                    'skipped' => $result['skipped'],
-                ]);
-            } else {
-                Log::info("Sova export on create: order #{$order->id} exported", [
-                    'exported' => $result['exported'] ?? 0,
-                ]);
-            }
-        } catch (\Throwable $e) {
-            Log::warning('Sova export on create failed: ' . $e->getMessage());
-        }
-
         return response()->json([
             'success'           => true,
             'order_id'          => $order->id,
             'order_total_price' => $order->total,
         ]);
-    }
-
-    private function buildOrderEmailText(Order $order, BotUser $user): string
-    {
-        $fio = trim(($order->last_name ?? '') . ' ' . ($order->first_name ?? '') . ' ' . ($order->patronymic ?? ''));
-        $total = number_format($order->total, 0, '.', ' ');
-
-        $text = "Новый заказ №{$order->id}\n";
-        $text .= "================================\n\n";
-        $text .= "Клиент: {$fio}\n";
-        $text .= "Телефон: {$order->phone}\n";
-        if ($order->email) {
-            $text .= "Email: {$order->email}\n";
-        }
-        $text .= "Telegram: @{$user->uname} (ID: {$user->chat_id})\n";
-        $text .= "\n--- Товары ---\n";
-
-        foreach ($order->items as $oi) {
-            $unitPrice = number_format($oi->price, 0, '.', ' ');
-            $itemTotal = number_format($oi->price * $oi->quantity, 0, '.', ' ');
-            $name = $oi->product->name ?? 'Товар';
-            $text .= "{$name} — {$oi->quantity} x {$unitPrice} = {$itemTotal} сум\n";
-        }
-
-        $text .= "\nИтого: {$total} сум\n";
-        $text .= "Оплата: Наличными при получении\n";
-
-        if ($order->comment) {
-            $text .= "\nКомментарий: {$order->comment}\n";
-        }
-
-        $text .= "\n================================\n";
-        $text .= "Дата заказа: " . $order->created_at->format('d.m.Y H:i') . "\n";
-
-        return $text;
     }
 }

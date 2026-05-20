@@ -132,23 +132,12 @@
         </div>
 
         @php
-            $minOrder = 1500;
-            $cartTotal = (float) ($pricing['total'] ?? 0);
             $isEmpty = $cart->items->count() === 0;
-            $isBelowMin = !$isEmpty && $cartTotal < $minOrder;
-            $isDisabled = $isEmpty || $isBelowMin;
-            if ($isEmpty) {
-                $btnText = __('webapp.cart_empty');
-            } elseif ($isBelowMin) {
-                $btnText = __('webapp.min_order_hint', ['amount' => number_format($minOrder, 0, '.', ' ')]);
-            } else {
-                $btnText = __('webapp.place_order');
-            }
+            $btnText = $isEmpty ? __('webapp.cart_empty') : __('webapp.place_order');
         @endphp
         <a href="{{ route('webapp.checkout', ['chat_id' => request('chat_id')]) }}"
            class="cart-panel__btn" id="make-order"
-           data-min-order="{{ $minOrder }}"
-           style="{{ $isDisabled ? 'opacity:0.4;pointer-events:none;background:var(--text-muted);box-shadow:none;display:block' : 'display:block' }}">
+           style="{{ $isEmpty ? 'opacity:0.4;pointer-events:none;background:var(--text-muted);box-shadow:none;display:block' : 'display:block' }}">
             {{ $btnText }}
         </a>
     </div>
@@ -159,9 +148,6 @@
         const csrf = "{{ csrf_token() }}";
         const emptyText = "{{ __('webapp.cart_empty') }}";
         const placeOrderText = "{{ __('webapp.place_order') }}";
-        const minOrderAmount = {{ $minOrder }};
-        const minOrderFormatted = "{{ number_format($minOrder, 0, '.', ' ') }}";
-        const minOrderHintTemplate = "{{ __('webapp.min_order_hint', ['amount' => ':amount']) }}";
 
         function showError(message) {
             const box = document.getElementById('alert-box');
@@ -209,9 +195,6 @@
 
             if (!isNaN(count) && count === 0) {
                 disableBtn(btn, emptyText);
-            } else if (total < minOrderAmount) {
-                const hint = minOrderHintTemplate.replace(':amount', minOrderFormatted);
-                disableBtn(btn, hint);
             } else {
                 enableBtn(btn, placeOrderText);
             }

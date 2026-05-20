@@ -244,7 +244,7 @@
             <div class="mb-4 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg text-sm text-blue-700 dark:text-blue-500">
                 <p class="font-medium mb-1">Формат файла (заголовки столбцов):</p>
                 <p>ID | External ID | Название | Описание | Цена | Категория | Статус | Скидка</p>
-                <p class="mt-1 text-xs">Если ID или External ID (ID SOVA) товара найден — товар обновляется. Иначе создается новый.</p>
+                <p class="mt-1 text-xs">Если ID или External ID (артикул) товара найден — товар обновляется. Иначе создаётся новый.</p>
             </div>
 
             <form action="{{ route('products.import') }}" method="POST" enctype="multipart/form-data">

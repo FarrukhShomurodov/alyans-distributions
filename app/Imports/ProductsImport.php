@@ -25,7 +25,7 @@ class ProductsImport implements ToModel, WithHeadingRow, SkipsEmptyRows
             'status' => 'status', 'статус' => 'status',
             'id' => 'id',
             'external_id' => 'external_id', 'externalid' => 'external_id', 'внешний_id' => 'external_id',
-            'id_sova' => 'external_id', 'sova_id' => 'external_id', 'idsova' => 'external_id',
+            'артикул' => 'external_id', 'artikul' => 'external_id', 'sku' => 'external_id', 'код' => 'external_id',
         ];
 
         $normalized = [];

@@ -351,14 +351,6 @@ class LandingController
 
         $pricing = $cart->pricingSummary();
 
-        // Минимальный заказ 1 500 сум — возвращаем в корзину с сообщением
-        $minOrder = 1500;
-        if (($pricing['total'] ?? 0) < $minOrder) {
-            return redirect()
-                ->route('webapp.cart', ['chat_id' => $chatId])
-                ->with('error', "Минимальная сумма заказа — {$minOrder} сум");
-        }
-
         return view('webapp.checkout', compact('cart', 'pricing', 'user'));
     }
 

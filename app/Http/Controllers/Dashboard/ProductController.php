@@ -221,7 +221,7 @@ class ProductController
         // Нарушение уникальности (UNIQUE constraint)
         if (str_contains($msg, '23505') || str_contains(strtolower($msg), 'duplicate')) {
             if (str_contains($msg, 'external_id')) {
-                return 'Товар с таким ID SOVA (external_id) уже существует. Укажите другой.';
+                return 'Товар с таким артикулом (external_id) уже существует. Укажите другой.';
             }
             if (str_contains($msg, 'slug')) {
                 return 'Товар с таким названием/slug уже есть. Измените название.';
