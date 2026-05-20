@@ -197,7 +197,7 @@
                             <div class="text-xs text-slate-600 dark:text-slate-400 mb-1">
                                 {{ $o->items->count() }} поз. ·
                                 <span class="font-semibold text-slate-800 dark:text-slate-100">
-                                    {{ number_format($o->total, 0, '', ' ') }} ₽
+                                    {{ number_format($o->total, 0, '', ' ') }} сум
                                 </span>
                             </div>
                             @if($o->delivery_address)

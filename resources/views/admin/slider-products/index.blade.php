@@ -65,7 +65,7 @@
                                     </td>
                                     <td class="px-4 py-2 text-sm text-slate-500">{{ $product->category?->name ?? '—' }}</td>
                                     <td class="px-4 py-2 text-sm text-right text-slate-700 dark:text-navy-100 font-medium">
-                                        {{ number_format($product->price, 0, '', ' ') }} ₽
+                                        {{ number_format($product->price, 0, '', ' ') }} сум
                                     </td>
                                     <td class="px-4 py-2 text-center">
                                         <form action="{{ route('slider-products.store') }}" method="POST" class="inline">
@@ -150,7 +150,7 @@
                                 </td>
 
                                 <td class="px-4 py-3 text-sm text-right font-medium text-slate-700 dark:text-navy-100">
-                                    {{ number_format($item->product->price, 0, '', ' ') }} ₽
+                                    {{ number_format($item->product->price, 0, '', ' ') }} сум
                                 </td>
 
                                 {{-- Активен toggle --}}

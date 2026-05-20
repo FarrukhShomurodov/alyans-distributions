@@ -298,7 +298,7 @@ class SupportForumService
 
         if ($ordersCount > 0) {
             $lines[] = "";
-            $lines[] = "🛒 Заказов: <b>{$ordersCount}</b>, на сумму <b>" . number_format($totalSum, 0, '.', ' ') . " ₽</b>";
+            $lines[] = "🛒 Заказов: <b>{$ordersCount}</b>, на сумму <b>" . number_format($totalSum, 0, '.', ' ') . " сум</b>";
         }
 
         $lines[] = "";

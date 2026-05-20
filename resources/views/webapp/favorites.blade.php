@@ -28,7 +28,7 @@
                         <div class="product-tile__name">{{ $fav->product->name }}</div>
                         <div class="product-tile__bottom">
                             <div class="product-tile__price">
-                                {{ number_format($fav->product->price, 0, '.', ' ') }} &#8381;
+                                {{ number_format($fav->product->price, 0, '.', ' ') }} сум
                             </div>
                             <button class="product-tile__cart" onclick="event.preventDefault(); event.stopPropagation(); addToCartFromTile(this, {{ $fav->product->id }})">
                                 <i data-lucide="shopping-cart"></i>

@@ -217,7 +217,7 @@
                                     <div class="product-tile__name">{{ $product->name }}</div>
                                     <div class="product-tile__bottom">
                                         <div class="product-tile__price">
-                                            {{ number_format($fp, 0, '.', ' ') }} &#8381;
+                                            {{ number_format($fp, 0, '.', ' ') }} сум
                                             @if($fp < $product->price)
                                                 <span class="product-tile__price-old">{{ number_format($product->price, 0, '.', ' ') }}</span>
                                             @endif
@@ -272,7 +272,7 @@
                         <div class="product-tile__name">{{ $product->name }}</div>
                         <div class="product-tile__bottom">
                             <div class="product-tile__price">
-                                {{ number_format($fp, 0, '.', ' ') }} &#8381;
+                                {{ number_format($fp, 0, '.', ' ') }} сум
                                 @if($fp < $product->price)
                                     <span class="product-tile__price-old">{{ number_format($product->price, 0, '.', ' ') }}</span>
                                 @endif

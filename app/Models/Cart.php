@@ -141,7 +141,7 @@ class Cart extends Model
 
         // === Скидки по порогам суммы заказа (из ТЗ) ===
         // Настраиваются в admin → promotion_settings.volume_tiers (JSON)
-        // По умолчанию: 5000₽=5%, 10000₽=7%, 15000₽=10%, 50000₽=15%
+        // По умолчанию: 5000 сум=5%, 10000 сум=7%, 15000 сум=10%, 50000 сум=15%
         $volumeTierPercent = 0;
         $volumeTiers = $promotion?->volume_tiers;
         if (is_string($volumeTiers)) {

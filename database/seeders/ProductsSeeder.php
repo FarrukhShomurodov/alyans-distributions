@@ -58,7 +58,7 @@ class ProductsSeeder extends Seeder
 
     /**
      * Каталог стройматериалов.
-     * Формат: [название, цена ₽, скидка%]
+     * Формат: [название, цена сум, скидка%]
      */
     private function catalog(): array
     {

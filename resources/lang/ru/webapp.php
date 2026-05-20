@@ -17,7 +17,7 @@ return [
 
     // Burger menu
     'menu_about' => 'О компании',
-    'menu_delivery' => 'Доставка и оплата',
+    'menu_delivery' => 'Оплата и оформление',
     'menu_sales' => 'Акции и скидки',
     'menu_returns' => 'Возврат и обмен',
     'menu_promo' => 'Промокоды',
@@ -33,26 +33,19 @@ return [
     'send' => 'Отправить',
 
     'cart_title' => 'Корзина',
-    'delivery_type' => 'Способ получения',
-    'pickup' => 'Самовывоз',
-    'delivery' => 'Доставка',
-    'delivery_address' => 'Адрес доставки',
-    'delivery_phone' => 'Телефон для доставки',
     'confirm' => 'Подтвердить',
 
     'subtotal' => 'Общая стоимость',
     'discount' => 'Скидка',
     'volume_discount' => 'Скидка за сумму',
     'total' => 'К оплате',
-    'payment_methods' => 'Способы оплаты',
-    'cash' => 'Наличными',
+    'payment_methods' => 'Способ оплаты',
+    'cash' => 'Наличными при получении',
 
     'cart_empty' => 'Корзина пуста',
     'pay' => 'Оплатить',
     'order' => 'Заказать',
-    'min_order_hint' => 'Минимальный заказ от :amount ₽',
-
-    'fill_delivery' => 'Введите адрес и телефон для доставки',
+    'min_order_hint' => 'Минимальный заказ от :amount сум',
 
     'favorites_title' => 'Избранное',
     'favorites_empty' => 'Избранных товаров нет',
@@ -67,12 +60,11 @@ return [
     'order_status_new' => 'Новый',
     'order_status_confirmed' => 'Подтверждён',
     'order_status_in_process' => 'В обработке',
-    'order_status_delivery' => 'Доставка',
+    'order_status_delivery' => 'Готов',
     'order_status_done' => 'Выполнен',
     'order_status_canceled' => 'Отменён',
 
     'loading' => 'Загрузка...',
-    'pvz_not_found' => 'ПВЗ не найдены',
 
     // Notifications
     'order_status_changed' => 'Статус вашего заказа №:id изменён',
@@ -118,8 +110,6 @@ return [
     // Checkout
     'checkout_title' => 'Оформление заказа',
     'step_contact' => 'Контакты',
-    'step_delivery' => 'Доставка',
-    'step_payment' => 'Оплата',
     'step_review' => 'Подтверждение',
 
     // Contact form
@@ -132,59 +122,20 @@ return [
     'next_step' => 'Далее',
     'back' => 'Назад',
 
-    // Delivery
-    'choose_delivery' => 'Выберите способ доставки',
-    'delivery_pvz' => 'Пункты выдачи',
-    'delivery_courier' => 'Курьером',
-    'delivery_courier_desc' => 'Только в пределах МКАД',
-    'cdek_pvz' => 'СДЭК ПВЗ',
-    'yandex_pvz' => 'Яндекс Доставка ПВЗ',
-    'search_city' => 'Поиск города...',
-    'search_address' => 'Введите адрес...',
-    'select_pvz' => 'Выбрать данный ПВЗ',
-    'deliver_here' => 'Привезти сюда',
-    'delivery_info' => 'Информация о доставке',
-    'delivery_cost' => 'Стоимость доставки',
-    'delivery_time' => 'Срок доставки',
-    'delivery_days' => ':min-:max дн.',
-    'delivery_address_label' => 'Адрес',
-    'apartment' => 'Кв./Офис',
-    'floor' => 'Этаж',
-    'entrance' => 'Подъезд',
-    'intercom' => 'Домофон',
-    'delivery_date' => 'Дата доставки',
-    'courier_moscow_only' => 'Курьерская доставка доступна только в пределах МКАД',
-    'approximate_cost' => 'ориентировочная',
-    'tab_pvz' => 'Пункты выдачи',
-    'tab_courier' => 'Курьером',
-    'yandex_short' => 'Яндекс',
-
-    // Payment info
-    'payment_info' => 'Информация об оплате',
-    'payment_yandex_note' => 'Яндекс Доставка — оплата по СБП, 100% предоплата. Реквизиты пришлёт менеджер.',
-    'payment_cdek_note' => 'СДЭК — оплата по СБП, 100% предоплата. Реквизиты пришлёт менеджер.',
-    'payment_courier_note' => 'Курьером в пределах МКАД — оплата наличными при получении. При заказе от 5 000 ₽ — доставка бесплатно.',
-
     // Review
     'review_title' => 'Просмотр и подтверждение',
     'review_contact' => 'Контактные данные',
-    'review_delivery' => 'Доставка',
     'review_items' => 'Товары',
     'review_payment' => 'Способ оплаты',
     'review_comment' => 'Комментарий',
     'review_promo' => 'Промокод',
     'items_total' => 'Товары',
-    'delivery_total' => 'Доставка',
     'place_order' => 'Оформить заказ',
 
     // Order complete
     'order_complete_title' => 'Заказ оформлен!',
     'order_complete_thanks' => 'Спасибо за покупку!',
-    'order_complete_text' => 'Скоро свяжется с Вами менеджер для уточнения и подтверждения заказа.',
-    'order_complete_hours' => 'Работаем:',
-    'order_complete_weekdays' => 'Будние 8:00 – 18:00',
-    'order_complete_saturday' => 'Суббота 8:00 – 16:00',
-    'order_complete_sunday' => 'Воскресенье – выходной',
+    'order_complete_text' => 'Менеджер свяжется с вами для подтверждения заказа.',
 
     // Fields required
     'field_required' => 'Обязательное поле',

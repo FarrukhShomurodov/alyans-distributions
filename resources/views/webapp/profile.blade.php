@@ -62,7 +62,7 @@
                     <span class="order-card__chevron"><i data-lucide="chevron-down"></i></span>
                 </div>
                 <div class="order-card__summary">
-                    {{ number_format($order->total, 0, '.', ' ') }} &#8381; &middot;
+                    {{ number_format($order->total, 0, '.', ' ') }} сум &middot;
                     {{ $order->created_at->format('d.m.Y H:i') }}
                 </div>
                 <div class="order-card__items">

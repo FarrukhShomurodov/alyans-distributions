@@ -50,9 +50,9 @@ class ProductShareController
             $finalPrice = $product->price * (100 - $promoPercent) / 100;
         }
 
-        $priceText = number_format($finalPrice, 0, '.', ' ') . ' ₽';
+        $priceText = number_format($finalPrice, 0, '.', ' ') . ' сум';
         if ($finalPrice < $product->price) {
-            $oldPrice = number_format($product->price, 0, '.', ' ') . ' ₽';
+            $oldPrice = number_format($product->price, 0, '.', ' ') . ' сум';
             $priceText .= " (~~{$oldPrice}~~)";
         }
 

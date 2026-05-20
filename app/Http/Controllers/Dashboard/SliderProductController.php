@@ -103,7 +103,7 @@ class SliderProductController
             ->map(fn ($p) => [
                 'id' => $p->id,
                 'name' => $p->name,
-                'price' => number_format($p->price, 0, '', ' ') . ' ₽',
+                'price' => number_format($p->price, 0, '', ' ') . ' сум',
                 'category' => $p->category?->name ?? '—',
             ]);
 

@@ -707,7 +707,7 @@ class TelegramController
             $finalPrice = $product->price * (100 - $promoPercent) / 100;
         }
 
-        $priceText = number_format($finalPrice, 0, '.', ' ') . ' ₽';
+        $priceText = number_format($finalPrice, 0, '.', ' ') . ' сум';
 
         // Формируем подпись
         $caption = $product->name . "\n";
@@ -993,7 +993,7 @@ class TelegramController
                 $finalPrice = $product->price * (100 - $promoPercent) / 100;
             }
 
-            $priceText = number_format($finalPrice, 0, '.', ' ') . ' ₽';
+            $priceText = number_format($finalPrice, 0, '.', ' ') . ' сум';
             $caption = $product->name . "\n\n💰 " . $priceText;
 
             if ($product->category) {

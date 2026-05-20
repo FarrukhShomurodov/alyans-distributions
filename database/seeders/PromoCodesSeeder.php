@@ -27,7 +27,7 @@ class PromoCodesSeeder extends Seeder
             ],
             [
                 'code' => 'ALYANS500',
-                'description' => 'Фиксированная скидка 500₽',
+                'description' => 'Фиксированная скидка 500 сум',
                 'type' => PromoCode::TYPE_FIXED,
                 'value' => 500,
                 'min_order_amount' => 3000,

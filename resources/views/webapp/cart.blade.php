@@ -42,7 +42,7 @@
                             <span class="cart-item__qty-display">{{ $item->quantity }}</span>
                             &times;
                             <span class="cart-item__unit-price">{{ number_format($unitPrice, 0, '.', ' ') }}</span>
-                            &#8381;
+                            сум
                         </span>
                         <div class="cart-item__controls">
                             <button class="cart-item__qty-btn cart-minus" data-id="{{ $item->id }}">
@@ -76,7 +76,7 @@
                         <i data-lucide="ticket" style="width:16px;height:16px;color:var(--accent)"></i>
                         <span class="promo-code-applied__code">{{ $cart->promoCode->code }}</span>
                         <span class="promo-code-applied__value">
-                            &minus;{{ number_format($pricing['promo_code_discount'], 0, '.', ' ') }} &#8381;
+                            &minus;{{ number_format($pricing['promo_code_discount'], 0, '.', ' ') }} сум
                         </span>
                     </div>
                     <button type="button" class="promo-code-applied__remove" id="removePromo">
@@ -114,21 +114,21 @@
 
         <div class="cart-panel__row">
             <span>{{ __('webapp.subtotal') }}:</span>
-            <span class="subtotal-price">{{ number_format($pricing['subtotal'], 0, '.', ' ') }} &#8381;</span>
+            <span class="subtotal-price">{{ number_format($pricing['subtotal'], 0, '.', ' ') }} сум</span>
         </div>
         @if(($pricing['volume_tier_percent'] ?? 0) > 0)
         <div class="cart-panel__row cart-panel__row--discount">
             <span>{{ __('webapp.volume_discount') }} ({{ $pricing['volume_tier_percent'] }}%):</span>
-            <span class="volume-discount-price">&minus;{{ number_format($pricing['volume_discount'], 0, '.', ' ') }} &#8381;</span>
+            <span class="volume-discount-price">&minus;{{ number_format($pricing['volume_discount'], 0, '.', ' ') }} сум</span>
         </div>
         @endif
         <div class="cart-panel__row cart-panel__row--discount">
             <span>{{ __('webapp.discount') }}:</span>
-            <span class="discount-price">&minus;{{ number_format($pricing['discount_total'], 0, '.', ' ') }} &#8381;</span>
+            <span class="discount-price">&minus;{{ number_format($pricing['discount_total'], 0, '.', ' ') }} сум</span>
         </div>
         <div class="cart-panel__row cart-panel__row--total">
             <span>{{ __('webapp.total') }}:</span>
-            <span class="total-price">{{ number_format($pricing['total'], 0, '.', ' ') }} &#8381;</span>
+            <span class="total-price">{{ number_format($pricing['total'], 0, '.', ' ') }} сум</span>
         </div>
 
         @php
@@ -197,9 +197,9 @@
         }
 
         function applyTotals(data) {
-            document.querySelectorAll('.subtotal-price').forEach(el => el.textContent = formatAmount(data.subtotal ?? 0) + ' \u20BD');
-            document.querySelectorAll('.discount-price').forEach(el => el.textContent = formatAmount(data.discount_total ?? 0) + ' \u20BD');
-            document.querySelectorAll('.total-price').forEach(el => el.textContent = formatAmount(data.total) + ' \u20BD');
+            document.querySelectorAll('.subtotal-price').forEach(el => el.textContent = formatAmount(data.subtotal ?? 0) + ' сум');
+            document.querySelectorAll('.discount-price').forEach(el => el.textContent = formatAmount(data.discount_total ?? 0) + ' сум');
+            document.querySelectorAll('.total-price').forEach(el => el.textContent = formatAmount(data.total) + ' сум');
 
             const btn = document.getElementById('make-order');
             if (!btn) return;
@@ -316,7 +316,7 @@
                 promoApplied.style.display = 'flex';
                 promoApplied.querySelector('.promo-code-applied__code').textContent = data.promo_code;
                 promoApplied.querySelector('.promo-code-applied__value').innerHTML =
-                    '&minus;' + formatAmount(data.promo_discount) + ' \u20BD';
+                    '&minus;' + formatAmount(data.promo_discount) + ' сум';
                 promoError.style.display = 'none';
 
                 // Re-init lucide for new icons

@@ -244,7 +244,7 @@ class CartController
             $msg = 'Промокод недействителен';
             if ($promo->min_order_amount > 0 && $orderAmount < $promo->min_order_amount) {
                 $min = number_format($promo->min_order_amount, 0, '.', ' ');
-                $msg = "Мин. сумма заказа: {$min} ₽";
+                $msg = "Мин. сумма заказа: {$min} сум";
             }
             return response()->json([
                 'success' => false,

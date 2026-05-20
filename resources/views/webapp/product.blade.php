@@ -76,9 +76,9 @@
             <div class="product-detail__name">{{ $product->name }}</div>
 
             <div class="product-detail__price-row">
-                <span class="product-detail__price">{{ number_format($finalPrice, 0, '.', ' ') }} &#8381;</span>
+                <span class="product-detail__price">{{ number_format($finalPrice, 0, '.', ' ') }} сум</span>
                 @if($finalPrice < $basePrice)
-                    <span class="product-detail__price-old">{{ number_format($basePrice, 0, '.', ' ') }} &#8381;</span>
+                    <span class="product-detail__price-old">{{ number_format($basePrice, 0, '.', ' ') }} сум</span>
                 @endif
                 @if($discountBadge)
                     <span class="product-detail__discount-badge">{{ $discountBadge }}</span>
