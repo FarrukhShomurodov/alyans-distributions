@@ -50,7 +50,7 @@
 
                 <div>
                     <label class="block text-sm font-medium text-slate-800 dark:text-slate-800 mb-1">
-                        ID SOVA (External ID)
+                        Артикул (External ID)
                     </label>
                     <input type="text" name="external_id" value="{{ old('external_id', $product->external_id) }}"
                            class="w-full rounded-lg border border-slate-300 dark:border-navy-500 bg-slate-50 dark:bg-navy-800 px-3 py-2 text-slate-800 dark:text-slate-800 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition"

@@ -116,7 +116,7 @@
             <thead class="bg-slate-100 dark:bg-navy-700">
             <tr>
                 <th class="px-4 py-3 text-left text-sm font-semibold text-slate-600 dark:text-navy-100">ID</th>
-                <th class="px-4 py-3 text-left text-sm font-semibold text-slate-600 dark:text-navy-100">ID SOVA</th>
+                <th class="px-4 py-3 text-left text-sm font-semibold text-slate-600 dark:text-navy-100">Артикул</th>
                 <th class="px-4 py-3 text-left text-sm font-semibold text-slate-600 dark:text-navy-100">Название</th>
                 <th class="px-4 py-3 text-left text-sm font-semibold text-slate-600 dark:text-navy-100">Категория</th>
                 <th class="px-4 py-3 text-left text-sm font-semibold text-slate-600 dark:text-navy-100">Цена</th>

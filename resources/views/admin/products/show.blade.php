@@ -36,7 +36,7 @@
                 </div>
 
                 <div>
-                    <h2 class="text-sm border-slate-800 dark:border-slate-800 font-medium mb-1">ID SOVA</h2>
+                    <h2 class="text-sm border-slate-800 dark:border-slate-800 font-medium mb-1">Артикул</h2>
                     <p class="text-lg font-semibold text-slate-800 ">{{ $product->external_id ?? '—' }}</p>
                 </div>
 

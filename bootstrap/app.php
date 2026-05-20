@@ -9,24 +9,6 @@ use Spatie\Permission\Middleware\RoleMiddleware;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withSchedule(function (\Illuminate\Console\Scheduling\Schedule $schedule) {
-        // Sync stock from file every 5 minutes (СОВА / universal)
-        $schedule->command('stock:sync-file --source=sova --delete-after')
-            ->everyFiveMinutes()
-            ->withoutOverlapping()
-            ->appendOutputTo(storage_path('logs/stock-sync.log'));
-
-        // Sync categories, products, stocks from Sova API every 30 minutes
-        $schedule->command('sova:sync')
-            ->everyThirtyMinutes()
-            ->withoutOverlapping()
-            ->appendOutputTo(storage_path('logs/sova-sync.log'));
-
-        // Export new orders to Sova every 30 minutes
-        $schedule->command('sova:export-orders')
-            ->everyThirtyMinutes()
-            ->withoutOverlapping()
-            ->appendOutputTo(storage_path('logs/sova-export-orders.log'));
-
         // Clean expired carts (30 min timeout)
         $schedule->command('cart:cleanup')
             ->everyFiveMinutes()

@@ -59,14 +59,7 @@
                     <input type="file" name="file" accept=".csv,.xlsx,.xls" required
                            class="w-full rounded-lg border-slate-300 dark:border-navy-500 dark:bg-navy-700 dark:text-navy-50 text-sm">
                 </div>
-                <div class="mb-4">
-                    <label class="block text-sm font-medium text-slate-700 dark:text-navy-100 mb-1">Источник</label>
-                    <select name="source" class="w-full rounded-lg border-slate-300 dark:border-navy-500 dark:bg-navy-700 dark:text-navy-50 text-sm">
-                        <option value="file">Файл (ручной)</option>
-                        <option value="sova">СОВА</option>
-                        <option value="1c">1С</option>
-                    </select>
-                </div>
+                <input type="hidden" name="source" value="file">
                 <div class="mb-4 p-3 rounded-lg bg-slate-50 dark:bg-navy-700 text-xs text-slate-600 dark:text-navy-200">
                     <p class="font-semibold mb-1">Формат файла:</p>
                     <p>Колонки: <strong>код товара</strong> (или external_id, id) + <strong>количество</strong> (или остаток, qty)</p>
