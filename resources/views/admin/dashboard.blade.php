@@ -16,12 +16,12 @@
         <!-- Общая выручка -->
         <div class="bg-white p-5 rounded-xl shadow">
             <div class="text-gray-500 text-sm">Выручка</div>
-            <div class="text-3xl font-bold mt-1">{{ number_format($totalRevenue, 0, '.', ' ') }} руб</div>
+            <div class="text-3xl font-bold mt-1">{{ number_format($totalRevenue, 0, '.', ' ') }} сум</div>
         </div>
         <!-- Средний чек -->
         <div class="bg-white p-5 rounded-xl shadow">
             <div class="text-gray-500 text-sm">Средний чек</div>
-            <div class="text-3xl font-bold mt-1">{{ number_format($avgOrderTotal, 0, '.', ' ') }} руб</div>
+            <div class="text-3xl font-bold mt-1">{{ number_format($avgOrderTotal, 0, '.', ' ') }} сум</div>
         </div>
         <!-- Среднее кол-во товаров в заказе -->
         <div class="bg-white p-5 rounded-xl shadow">

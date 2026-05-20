@@ -61,7 +61,7 @@
                 <div class="flex justify-between">
                     <span class="text-slate-500">Сумма:</span>
                     <span class="font-semibold text-lg">
-                        {{ number_format($order->total, 0, '', ' ') }} руб
+                        {{ number_format($order->total, 0, '', ' ') }} сум
                     </span>
                 </div>
 
@@ -143,13 +143,13 @@
                             {{ $item->product->name ?? '—' }}
                         </td>
                         <td class="px-4 py-3 text-sm">
-                            {{ number_format($item->price, 0, '', ' ') }} руб
+                            {{ number_format($item->price, 0, '', ' ') }} сум
                         </td>
                         <td class="px-4 py-3 text-sm">
                             {{ $item->quantity }}
                         </td>
                         <td class="px-4 py-3 text-sm font-semibold">
-                            {{ number_format($item->price * $item->quantity, 0, '', ' ') }} руб
+                            {{ number_format($item->price * $item->quantity, 0, '', ' ') }} сум
                         </td>
                     </tr>
                 @endforeach

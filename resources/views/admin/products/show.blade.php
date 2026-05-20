@@ -50,7 +50,7 @@
                 <div>
                     <h2 class="text-sm border-slate-800 dark:border-slate-800 font-medium mb-1">Цена</h2>
                     <p class="text-lg font-semibold text-slate-800 ">
-                        {{ number_format($product->price, 2) }} руб
+                        {{ number_format($product->price, 2) }} сум
                     </p>
                 </div>
 

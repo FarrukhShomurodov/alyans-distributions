@@ -101,7 +101,7 @@
                                     @method('PUT')
                                     <input type="number" name="min_amount" value="{{ $tier->min_amount }}" min="1"
                                            class="w-32 rounded-lg border border-slate-300 bg-slate-50 dark:bg-navy-800 px-3 py-1.5 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition"/>
-                                    <span class="text-sm text-slate-500">руб.</span>
+                                    <span class="text-sm text-slate-500">сум.</span>
                             </td>
                             <td class="px-4 py-3">
                                     <div class="flex items-center gap-2">
@@ -158,7 +158,7 @@
             @csrf
             <div class="flex items-end gap-4 flex-wrap">
                 <div>
-                    <label class="block text-sm font-medium text-slate-700 dark:text-navy-200 mb-1">Сумма от (руб.)</label>
+                    <label class="block text-sm font-medium text-slate-700 dark:text-navy-200 mb-1">Сумма от (сум.)</label>
                     <input type="number" name="min_amount" min="1" required placeholder="5000"
                            class="w-40 rounded-lg border border-slate-300 bg-slate-50 dark:bg-navy-800 px-3 py-2 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition"/>
                 </div>

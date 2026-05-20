@@ -88,7 +88,7 @@
         <div class="bg-white dark:bg-navy-800 rounded-xl shadow-sm border border-slate-200 dark:border-navy-600 p-4">
             <div class="text-sm text-slate-500 ">Средняя цена</div>
             <div class="text-2xl font-semibold text-slate-800  mt-1">
-                {{ number_format($stats['avg_price'] ?? $products->avg('price'), 0) }} руб
+                {{ number_format($stats['avg_price'] ?? $products->avg('price'), 0) }} сум
             </div>
         </div>
 

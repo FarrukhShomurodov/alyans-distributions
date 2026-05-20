@@ -31,7 +31,7 @@ class NewOrderNotification extends Notification
         return (new MailMessage)
             ->subject("Новый заказ #{$order->id} — ALYANS DISTRIBUTIONS")
             ->greeting("Новый заказ #{$order->id}")
-            ->line("Сумма: " . number_format($order->total, 0, '', ' ') . " руб.")
+            ->line("Сумма: " . number_format($order->total, 0, '', ' ') . " сум.")
             ->line("Клиент: " . ($user ? ($user->first_name . ' ' . $user->second_name) : 'Неизвестен'))
             ->line("Телефон: " . ($order->delivery_phone ?? '—'))
             ->line("Доставка: " . ($order->delivery_address ?? '—'))

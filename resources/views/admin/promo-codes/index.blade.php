@@ -48,13 +48,13 @@
                             @endif
                         </td>
                         <td class="px-4 py-3 text-sm font-medium">
-                            {{ $code->value }}{{ $code->type === 'percent' ? '%' : ' руб.' }}
+                            {{ $code->value }}{{ $code->type === 'percent' ? '%' : ' сум.' }}
                             @if($code->max_discount)
-                                <div class="text-xs text-slate-400">макс. {{ number_format($code->max_discount, 0, '', ' ') }} руб.</div>
+                                <div class="text-xs text-slate-400">макс. {{ number_format($code->max_discount, 0, '', ' ') }} сум.</div>
                             @endif
                         </td>
                         <td class="px-4 py-3 text-sm">
-                            {{ $code->min_order_amount > 0 ? number_format($code->min_order_amount, 0, '', ' ') . ' руб.' : '—' }}
+                            {{ $code->min_order_amount > 0 ? number_format($code->min_order_amount, 0, '', ' ') . ' сум.' : '—' }}
                         </td>
                         <td class="px-4 py-3 text-center text-sm">
                             {{ $code->used_count }}{{ $code->usage_limit ? ' / ' . $code->usage_limit : '' }}

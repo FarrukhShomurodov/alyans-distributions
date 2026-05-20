@@ -27,7 +27,7 @@
         <select name="type"
                 class="w-full rounded-lg border border-slate-300 bg-slate-50 dark:bg-navy-800 px-3 py-2 text-slate-800 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition">
             <option value="percent" @selected(old('type', $p?->type) === 'percent')>Процент (%)</option>
-            <option value="fixed" @selected(old('type', $p?->type) === 'fixed')>Фиксированная сумма (руб.)</option>
+            <option value="fixed" @selected(old('type', $p?->type) === 'fixed')>Фиксированная сумма (сум.)</option>
         </select>
     </div>
 
@@ -41,14 +41,14 @@
 
 <div class="grid sm:grid-cols-3 gap-5">
     <div>
-        <label class="block text-sm font-medium text-slate-700 mb-1">Мин. сумма заказа (руб.)</label>
+        <label class="block text-sm font-medium text-slate-700 mb-1">Мин. сумма заказа (сум.)</label>
         <input type="number" name="min_order_amount" value="{{ old('min_order_amount', $p?->min_order_amount) }}" min="0"
                placeholder="0"
                class="w-full rounded-lg border border-slate-300 bg-slate-50 dark:bg-navy-800 px-3 py-2 text-slate-800 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition">
     </div>
 
     <div>
-        <label class="block text-sm font-medium text-slate-700 mb-1">Макс. скидка (руб.)</label>
+        <label class="block text-sm font-medium text-slate-700 mb-1">Макс. скидка (сум.)</label>
         <input type="number" name="max_discount" value="{{ old('max_discount', $p?->max_discount) }}" min="1"
                placeholder="Без ограничения"
                class="w-full rounded-lg border border-slate-300 bg-slate-50 dark:bg-navy-800 px-3 py-2 text-slate-800 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition">

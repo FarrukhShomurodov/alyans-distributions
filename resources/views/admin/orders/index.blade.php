@@ -116,7 +116,7 @@
                     <td class="px-3 py-2">{{ $order->delivery_type }}</td>
 
                     <td class="px-3 py-2 font-semibold">
-                        {{ number_format($order->total, 0, '', ' ') }} руб
+                        {{ number_format($order->total, 0, '', ' ') }} сум
                     </td>
 
                     <td class="px-3 py-2">
