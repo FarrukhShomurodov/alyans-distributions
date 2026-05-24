@@ -50,23 +50,32 @@
                 <div>
                     <h2 class="text-sm border-slate-800 dark:border-slate-800 font-medium mb-1">Цена</h2>
                     <p class="text-lg font-semibold text-slate-800 ">
-                        {{ number_format($product->price, 2) }} сум
+                        {{ number_format($product->price, 0, '.', ' ') }} сум
+                        <span class="text-sm font-normal text-slate-400">за {{ $product->unit ?: 'шт' }}</span>
                     </p>
                 </div>
 
                 <div>
+                    <h2 class="text-sm border-slate-800 dark:border-slate-800 font-medium mb-1">Торговая марка</h2>
+                    <p class="text-lg font-semibold text-slate-800 ">{{ $product->brand ?: '—' }}</p>
+                </div>
+
+                <div>
                     <h2 class="text-sm border-slate-800 dark:border-slate-800 font-medium mb-1">Статус</h2>
-                    @if($product->is_active)
-                        <span
-                            class="inline-flex items-center gap-1 px-3 py-1 text-sm font-medium rounded-full bg-emerald-100 text-emerald-700 dark:bg-emerald-800 dark:text-emerald-200">
-                            <span class="w-2 h-2 bg-emerald-500 rounded-full"></span> Активен
-                        </span>
-                    @else
-                        <span
-                            class="inline-flex items-center gap-1 px-3 py-1 text-sm font-medium rounded-full bg-rose-100 text-rose-700 dark:bg-rose-800 dark:text-rose-200">
-                            <span class="w-2 h-2 bg-rose-500 rounded-full"></span> Неактивен
-                        </span>
-                    @endif
+                    <div class="flex items-center gap-2 flex-wrap">
+                        @if($product->is_active)
+                            <span class="inline-flex items-center gap-1 px-3 py-1 text-sm font-medium rounded-full bg-emerald-100 text-emerald-700 dark:bg-emerald-800 dark:text-emerald-200">
+                                <span class="w-2 h-2 bg-emerald-500 rounded-full"></span> Активен
+                            </span>
+                        @else
+                            <span class="inline-flex items-center gap-1 px-3 py-1 text-sm font-medium rounded-full bg-rose-100 text-rose-700 dark:bg-rose-800 dark:text-rose-200">
+                                <span class="w-2 h-2 bg-rose-500 rounded-full"></span> Неактивен
+                            </span>
+                        @endif
+                        @if($product->is_top)
+                            <span class="inline-flex items-center gap-1 px-3 py-1 text-sm font-medium rounded-full bg-amber-100 text-amber-800 dark:bg-amber-800/40 dark:text-amber-300">⭐ Топ позиция</span>
+                        @endif
+                    </div>
                 </div>
             </div>
 

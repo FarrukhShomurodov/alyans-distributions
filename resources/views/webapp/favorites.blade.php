@@ -13,24 +13,30 @@
     @if($favorites->count())
         <div class="favorites-grid">
             @foreach($favorites as $fav)
-                <a href="{{ route('webapp.product.show', $fav->product->id) }}" class="product-tile">
+                @php $p = $fav->product; @endphp
+                <a href="{{ route('webapp.product.show', $p->id) }}" class="product-tile">
+                    @if(!empty($p->is_top))
+                        <span class="product-tile__top-badge">⭐ ХИТ</span>
+                    @endif
                     <button class="product-tile__fav active js-unfav"
-                            data-product="{{ $fav->product->id }}"
-                            onclick="event.preventDefault(); event.stopPropagation(); removeFav(this, {{ $fav->product->id }})">
+                            data-product="{{ $p->id }}"
+                            onclick="event.preventDefault(); event.stopPropagation(); removeFav(this, {{ $p->id }})">
                         <i data-lucide="heart"></i>
                     </button>
                     <img class="product-tile__img" loading="lazy"
-                         src="{{ $fav->product->images->first()
-                            ? asset('storage/' . $fav->product->images->first()->url)
-                            : '/no-image.png' }}"
-                         alt="{{ $fav->product->name }}">
+                         src="{{ $p->images->first() ? asset('storage/' . $p->images->first()->url) : '/no-image.png' }}"
+                         alt="{{ $p->name }}">
                     <div class="product-tile__info">
-                        <div class="product-tile__name">{{ $fav->product->name }}</div>
+                        @if(!empty($p->brand))
+                            <div class="product-tile__brand">{{ $p->brand }}</div>
+                        @endif
+                        <div class="product-tile__name">{{ $p->name }}</div>
                         <div class="product-tile__bottom">
                             <div class="product-tile__price">
-                                {{ number_format($fav->product->price, 0, '.', ' ') }} сум
+                                {{ number_format($p->price, 0, '.', ' ') }} сум
+                                @if(!empty($p->unit))<span class="product-tile__unit">/ {{ $p->unit }}</span>@endif
                             </div>
-                            <button class="product-tile__cart" onclick="event.preventDefault(); event.stopPropagation(); addToCartFromTile(this, {{ $fav->product->id }})">
+                            <button class="product-tile__cart" onclick="event.preventDefault(); event.stopPropagation(); addToCartFromTile(this, {{ $p->id }})">
                                 <i data-lucide="shopping-cart"></i>
                             </button>
                         </div>

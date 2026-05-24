@@ -25,6 +25,9 @@ class ProductRequest extends FormRequest
             'price' => 'required|numeric|min:0',
             'discount_percent' => 'nullable|integer|min:0|max:100',
             'is_active' => 'nullable|boolean',
+            'is_top' => 'nullable|boolean',
+            'brand' => 'nullable|string|max:255',
+            'unit' => 'nullable|string|max:32',
             'external_id' => [
                 'nullable',
                 'string',

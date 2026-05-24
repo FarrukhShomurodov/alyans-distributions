@@ -20,6 +20,14 @@ class Product extends Model
         'discount_percent',
         'external_id',
         'is_active',
+        'brand',
+        'unit',
+        'is_top',
+    ];
+
+    protected $casts = [
+        'is_active' => 'boolean',
+        'is_top' => 'boolean',
     ];
 
     protected static function boot()

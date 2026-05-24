@@ -118,8 +118,10 @@
                 <th class="px-4 py-3 text-left text-sm font-semibold text-slate-600 dark:text-navy-100">ID</th>
                 <th class="px-4 py-3 text-left text-sm font-semibold text-slate-600 dark:text-navy-100">Артикул</th>
                 <th class="px-4 py-3 text-left text-sm font-semibold text-slate-600 dark:text-navy-100">Название</th>
+                <th class="px-4 py-3 text-left text-sm font-semibold text-slate-600 dark:text-navy-100">Бренд</th>
                 <th class="px-4 py-3 text-left text-sm font-semibold text-slate-600 dark:text-navy-100">Категория</th>
-                <th class="px-4 py-3 text-left text-sm font-semibold text-slate-600 dark:text-navy-100">Цена</th>
+                <th class="px-4 py-3 text-left text-sm font-semibold text-slate-600 dark:text-navy-100">Цена / Ед.</th>
+                <th class="px-4 py-3 text-center text-sm font-semibold text-slate-600 dark:text-navy-100">Топ</th>
                 <th class="px-4 py-3 text-center text-sm font-semibold text-slate-600 dark:text-navy-100">Фото</th>
                 <th class="px-4 py-3 text-center text-sm font-semibold text-slate-600 dark:text-navy-100">Статус</th>
                 <th class="px-4 py-3 text-center text-sm font-semibold text-slate-600 dark:text-navy-100">Действия</th>
@@ -142,9 +144,22 @@
                     </td>
 
 
+                    <td class="px-4 py-3 text-sm">{{ $product->brand ?: '—' }}</td>
+
                     <td class="px-4 py-3 text-sm">{{ $product->category->name ?? '—' }}</td>
 
-                    <td class="px-4 py-3 text-sm font-semibold">{{ number_format($product->price, 2) }} </td>
+                    <td class="px-4 py-3 text-sm font-semibold">
+                        {{ number_format($product->price, 0, '.', ' ') }} сум
+                        <span class="block text-xs font-normal text-slate-400">за {{ $product->unit ?: 'шт' }}</span>
+                    </td>
+
+                    <td class="px-4 py-3 text-center">
+                        @if($product->is_top)
+                            <span class="inline-flex items-center gap-1 px-2 py-1 text-xs font-medium rounded-full bg-amber-100 text-amber-800 dark:bg-amber-800/40 dark:text-amber-300" title="Топ позиция">⭐ Топ</span>
+                        @else
+                            <span class="text-slate-300">—</span>
+                        @endif
+                    </td>
 
                     <!-- Фото -->
                     <td class="px-4 py-3 text-center">

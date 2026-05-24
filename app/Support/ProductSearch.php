@@ -8,10 +8,10 @@ use Illuminate\Database\Eloquent\Builder;
 class ProductSearch
 {
     /**
-     * Применяет умный поиск по названию товара.
+     * Применяет умный поиск по названию и бренду товара.
      *
      * - Если запрос — число, ищется также по id и external_id (артикул)
-     * - Запрос разбивается на слова, каждое должно встретиться в name
+     * - Запрос разбивается на слова, каждое должно встретиться в name ИЛИ brand
      *   (порядок неважен, регистр неважен)
      *
      * @param Builder|BuilderContract $query
@@ -31,12 +31,15 @@ class ProductSearch
                 $outer->orWhere('external_id', $search);
             }
 
-            // Многословный поиск: все токены должны встретиться в name
+            // Многословный поиск: все токены должны встретиться в name или brand
             $tokens = preg_split('/\s+/u', mb_strtolower($search), -1, PREG_SPLIT_NO_EMPTY) ?: [];
             if (!empty($tokens)) {
                 $outer->orWhere(function ($w) use ($tokens) {
                     foreach ($tokens as $token) {
-                        $w->where('name', 'ILIKE', '%' . $token . '%');
+                        $w->where(function ($q) use ($token) {
+                            $q->where('name', 'ILIKE', '%' . $token . '%')
+                              ->orWhere('brand', 'ILIKE', '%' . $token . '%');
+                        });
                     }
                 });
             }

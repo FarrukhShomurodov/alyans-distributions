@@ -73,10 +73,25 @@
 
         {{-- BODY --}}
         <div class="product-detail__body">
-            <div class="product-detail__name">{{ $product->name }}</div>
+            @if(!empty($product->brand))
+                <div style="font-size:12px;color:var(--text-muted);font-weight:600;margin-bottom:4px;text-transform:uppercase;letter-spacing:0.3px">
+                    {{ $product->brand }}
+                </div>
+            @endif
+            <div class="product-detail__name">
+                {{ $product->name }}
+                @if(!empty($product->is_top))
+                    <span style="display:inline-block;background:var(--accent);color:#fff;font-size:11px;font-weight:800;padding:3px 8px;border-radius:6px;margin-left:6px;vertical-align:middle">⭐ ХИТ</span>
+                @endif
+            </div>
 
             <div class="product-detail__price-row">
-                <span class="product-detail__price">{{ number_format($finalPrice, 0, '.', ' ') }} сум</span>
+                <span class="product-detail__price">
+                    {{ number_format($finalPrice, 0, '.', ' ') }} сум
+                    @if(!empty($product->unit))
+                        <span style="font-size:13px;font-weight:400;color:var(--text-muted)">/ {{ $product->unit }}</span>
+                    @endif
+                </span>
                 @if($finalPrice < $basePrice)
                     <span class="product-detail__price-old">{{ number_format($basePrice, 0, '.', ' ') }} сум</span>
                 @endif
@@ -89,8 +104,11 @@
                 @if($product->category)
                     <div><strong>{{ __('webapp.category') }}:</strong> {{ $product->category->name }}</div>
                 @endif
+                @if(!empty($product->external_id))
+                    <div><strong>Артикул:</strong> {{ $product->external_id }}</div>
+                @endif
                 @if($product->stock)
-                    <div><strong>{{ __('webapp.in_stock') }}:</strong> {{ $product->stock->quantity }} {{ __('webapp.pcs') }}</div>
+                    <div><strong>{{ __('webapp.in_stock') }}:</strong> {{ $product->stock->quantity }} {{ $product->unit ?: __('webapp.pcs') }}</div>
                 @endif
                 @if($attributesGrouped->isNotEmpty())
                     @foreach($attributesGrouped as $attributeName => $items)

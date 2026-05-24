@@ -35,7 +35,7 @@ class ProductController
         $photoFilter = $request->query('photo'); // '' | 'with' | 'without'
 
         $baseQuery = Product::query()->select([
-            'id', 'name', 'slug', 'is_active', 'price', 'category_id','external_id',
+            'id', 'name', 'slug', 'is_active', 'is_top', 'price', 'unit', 'brand', 'category_id', 'external_id',
         ])
             ->when($search !== '', function ($query) use ($search) {
                 ProductSearch::apply($query, $search);

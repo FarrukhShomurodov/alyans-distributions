@@ -98,11 +98,50 @@
                            placeholder="0">
                 </div>
 
-                <div class="flex items-center space-x-2 pt-6">
-                    <input type="checkbox" name="is_active" value="1" @checked(old('is_active'))
-                    class="w-4 h-4 rounded border-slate-400 text-blue-600 focus:ring-blue-500
-                          dark:bg-navy-800 dark:border-navy-500 dark:checked:bg-blue-600">
-                    <label class="text-sm text-slate-700 dark:text-slate-800">Активен</label>
+                <div>
+                    <label class="block text-sm font-medium text-slate-800 dark:text-slate-800 mb-1">
+                        Торговая марка
+                    </label>
+                    <input type="text" name="brand" value="{{ old('brand') }}"
+                           class="w-full rounded-lg border border-slate-300 dark:border-navy-500
+                          bg-slate-50 dark:bg-navy-800 px-3 py-2 text-slate-800 dark:text-slate-800 text-sm
+                          focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition"
+                           placeholder="Например: Технониколь">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-slate-800 dark:text-slate-800 mb-1">
+                        Единица измерения
+                    </label>
+                    <select name="unit"
+                            class="w-full rounded-lg border border-slate-300 dark:border-navy-500
+                           bg-slate-50 dark:bg-navy-800 px-3 py-2 text-slate-800 dark:text-slate-800 text-sm
+                           focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition">
+                        @php $unit = old('unit', 'шт'); @endphp
+                        <option value="шт" @selected($unit === 'шт')>шт</option>
+                        <option value="уп" @selected($unit === 'уп')>уп</option>
+                        <option value="Рулон" @selected($unit === 'Рулон')>Рулон</option>
+                        <option value="м" @selected($unit === 'м')>м</option>
+                        <option value="м²" @selected($unit === 'м²')>м²</option>
+                        <option value="м³" @selected($unit === 'м³')>м³</option>
+                        <option value="кг" @selected($unit === 'кг')>кг</option>
+                        <option value="л" @selected($unit === 'л')>л</option>
+                    </select>
+                </div>
+
+                <div class="flex flex-col gap-3 pt-2 sm:col-span-2">
+                    <label class="inline-flex items-center gap-2">
+                        <input type="checkbox" name="is_active" value="1" @checked(old('is_active', true))
+                               class="w-4 h-4 rounded border-slate-400 text-blue-600 focus:ring-blue-500
+                                      dark:bg-navy-800 dark:border-navy-500 dark:checked:bg-blue-600">
+                        <span class="text-sm text-slate-700 dark:text-slate-800">Активен</span>
+                    </label>
+                    <label class="inline-flex items-center gap-2">
+                        <input type="checkbox" name="is_top" value="1" @checked(old('is_top'))
+                               class="w-4 h-4 rounded border-slate-400 text-amber-600 focus:ring-amber-500
+                                      dark:bg-navy-800 dark:border-navy-500 dark:checked:bg-amber-600">
+                        <span class="text-sm text-slate-700 dark:text-slate-800">⭐ Топ позиция</span>
+                    </label>
                 </div>
             </div>
 
